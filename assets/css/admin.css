@@ -1,0 +1,109 @@
+/* Admin UI: gallery only */
+
+.sgc-admin-interface {
+    padding: 15px 0;
+}
+
+.sgc-gallery-field {
+    margin-bottom: 25px;
+    padding: 15px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.sgc-gallery-field h4 {
+    margin-top: 0;
+    color: #23282d;
+}
+
+.sgc-image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin: 10px 0 15px;
+    min-height: 60px;
+}
+
+.sgc-image-item {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    text-align: center;
+    background: #fff;
+    padding-top: 25px;
+}
+
+.sgc-drag-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 24px;
+    background: #f0f0f1;
+    border-bottom: 1px solid #ddd;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 16px;
+    line-height: 1;
+    z-index: 5;
+}
+
+.sgc-drag-handle:hover {
+    background: #e5e5e5;
+    color: #666;
+}
+
+.sgc-image-item img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    display: block;
+}
+
+.sgc-image-name {
+    font-size: 11px;
+    color: #444;
+    font-weight: 500;
+    margin: 5px;
+    line-height: 1.2;
+    background: #f0f0f1;
+    padding: 3px 5px;
+    border-radius: 3px;
+    word-break: break-all;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+}
+
+.sgc-remove-image {
+    width: 100%;
+    margin: 0;
+    border-radius: 0 0 3px 3px;
+    background: #dc3232;
+    color: #fff;
+    border: none;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+.sgc-remove-image:hover {
+    background: #c02c2c;
+}
+
+.sgc-sortable-placeholder {
+    border: 2px dashed #ccc;
+    background: #f0f0f1;
+    border-radius: 4px;
+    height: 150px;
+}
+
+#sgc-add-gallery-image {
+    margin-top: 10px;
+}
