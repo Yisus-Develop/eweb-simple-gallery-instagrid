@@ -151,7 +151,7 @@ class EWGCS_Core {
 
     /**
      * Obtener imagenes de galeria para un post.
-     * Prioridad: meta idioma > meta plugin base > meta legacy > ACF > adjuntas > fallback multilenguaje.
+     * Prioridad: meta idioma > meta plugin base > meta legacy > ACF > adjuntas > fallback idioma mismo post > fallback multilenguaje otro post.
      */
     public static function get_gallery_images( $post_id, $lang = '' ) {
         $lang        = self::sanitize_lang_code( $lang );
@@ -187,7 +187,20 @@ class EWGCS_Core {
             return $attached;
         }
 
-        // --- MULTILINGUAL TRANSLATION FALLBACK ---
+        // --- SAME POST MULTILINGUAL METADATA FALLBACK ---
+        $langs = self::get_active_languages();
+        foreach ( $langs as $l ) {
+            if ( $l === $lang ) {
+                continue;
+            }
+            $fallback_key = self::get_gallery_meta_key( $l );
+            $fallback_images = get_post_meta( $post_id, $fallback_key, true );
+            if ( ! empty( $fallback_images ) && is_array( $fallback_images ) ) {
+                return self::format_gallery_images( $fallback_images );
+            }
+        }
+
+        // --- MULTILINGUAL TRANSLATION FALLBACK (SEPARATE POSTS) ---
         $fallback_post_id = self::get_translation_fallback_post_id( $post_id );
         if ( $fallback_post_id && $fallback_post_id !== $post_id ) {
             $fallback_images = get_post_meta( $fallback_post_id, '_ewgcs_gallery_images', true );
@@ -195,7 +208,6 @@ class EWGCS_Core {
                 return self::format_gallery_images( $fallback_images );
             }
 
-            $langs = self::get_active_languages();
             foreach ( $langs as $l ) {
                 $fallback_key = self::get_gallery_meta_key( $l );
                 $fallback_images = get_post_meta( $fallback_post_id, $fallback_key, true );
@@ -222,7 +234,20 @@ class EWGCS_Core {
             return $fallback;
         }
 
-        // --- MULTILINGUAL TRANSLATION FALLBACK ---
+        // --- SAME POST MULTILINGUAL METADATA FALLBACK ---
+        $langs = self::get_active_languages();
+        foreach ( $langs as $l ) {
+            if ( $l === $lang ) {
+                continue;
+            }
+            $fallback_key = self::get_social_meta_key( $l );
+            $social_url = get_post_meta( $post_id, $fallback_key, true );
+            if ( ! empty( $social_url ) && filter_var( $social_url, FILTER_VALIDATE_URL ) ) {
+                return $social_url;
+            }
+        }
+
+        // --- MULTILINGUAL TRANSLATION FALLBACK (SEPARATE POSTS) ---
         $fallback_post_id = self::get_translation_fallback_post_id( $post_id );
         if ( $fallback_post_id && $fallback_post_id !== $post_id ) {
             $social_url = get_post_meta( $fallback_post_id, '_ewgcs_social_url', true );
@@ -230,7 +255,6 @@ class EWGCS_Core {
                 return $social_url;
             }
 
-            $langs = self::get_active_languages();
             foreach ( $langs as $l ) {
                 $fallback_key = self::get_social_meta_key( $l );
                 $social_url = get_post_meta( $fallback_post_id, $fallback_key, true );
